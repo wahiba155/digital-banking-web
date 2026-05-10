@@ -29,7 +29,7 @@ export class CustomersComponent implements OnInit {
     private customerService: CustomerService,
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService  // ← ajouter
+    public authService: AuthService  // ← ajouter
 
   ) {}
 
@@ -81,5 +81,8 @@ handleDeleteCustomer(c: Customer) {
     "/admin/customer-accounts/" + customer.id,  // ← ajouter /admin/
     { state: customer }
   );
+}
+handleEditCustomer(c: Customer) {
+  this.router.navigateByUrl('/admin/edit-customer/' + c.id);
 }
 }
