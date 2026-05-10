@@ -6,6 +6,7 @@ import { Customer } from "../model/customer.model";
 import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
 import { Router } from "@angular/router";
 import { AsyncPipe, NgForOf, NgIf } from "@angular/common";
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-customers',
@@ -27,7 +28,9 @@ export class CustomersComponent implements OnInit {
   constructor(
     private customerService: CustomerService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private authService: AuthService  // ← ajouter
+
   ) {}
 
   ngOnInit(): void {
@@ -47,26 +50,36 @@ export class CustomersComponent implements OnInit {
     );
   }
 
-  handleDeleteCustomer(c: Customer) {
-    let conf = confirm("Are you sure?");
-    if (!conf) return;
-    this.customerService.deleteCustomer(c.id).subscribe({
-      next: (resp) => {
-        this.customers = this.customers.pipe(
-          map(data => {
-            let index = data.indexOf(c);
-            data.splice(index, 1);
-            return data;
-          })
-        );
-      },
-      error: err => {
-        console.log(err);
-      }
-    });
+handleDeleteCustomer(c: Customer) {
+  // Vérifier si admin
+  if (!this.authService.roles.includes('ROLE_ADMIN')) {
+    this.router.navigateByUrl('/notAuthorized');
+    return;
   }
 
-  handleCustomerAccounts(customer: Customer) {
-    this.router.navigateByUrl("/customer-accounts/" + customer.id, { state: customer });
-  }
+  let conf = confirm("Are you sure?");
+  if (!conf) return;
+
+  this.customerService.deleteCustomer(c.id).subscribe({
+    next: (resp) => {
+      this.customers = this.customers.pipe(
+        map(data => {
+          let index = data.indexOf(c);
+          data.splice(index, 1);
+          return data;
+        })
+      );
+    },
+    error: err => {
+      console.log(err);
+    }
+  });
+}
+
+ handleCustomerAccounts(customer: Customer) {
+  this.router.navigateByUrl(
+    "/admin/customer-accounts/" + customer.id,  // ← ajouter /admin/
+    { state: customer }
+  );
+}
 }

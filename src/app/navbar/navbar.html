@@ -1,46 +1,44 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" routerLink="/">Navbar</a>
-    <button class="navbar-toggler" type="button" 
-            data-bs-toggle="collapse" 
-            data-bs-target="#navbarSupportedContent">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <a class="navbar-brand" routerLink="/admin/customers">E-Banking</a>
+    <div class="collapse navbar-collapse">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/" routerLinkActive="active">
-            Home
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/accounts" routerLinkActive="active">
-            Accounts
-          </a>
+          <a class="nav-link" routerLink="/admin/accounts">Accounts</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" 
-             data-bs-toggle="dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
             Customers
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a class="dropdown-item" routerLink="/customers">
+              <a class="dropdown-item" routerLink="/admin/customers">
                 Search customers
               </a>
             </li>
-            <li>
-              <a class="dropdown-item" routerLink="/new-customer">
+            <li *ngIf="authService.roles.includes('ROLE_ADMIN')">
+              <a class="dropdown-item" routerLink="/admin/new-customer">
                 New customer
               </a>
             </li>
           </ul>
         </li>
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="bi bi-person-circle"></i>
+            {{authService.username}}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <a class="dropdown-item text-danger" (click)="handleLogout()">
+                <i class="bi bi-box-arrow-right"></i> Logout
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </div>
 </nav>
