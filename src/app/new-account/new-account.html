@@ -1,0 +1,61 @@
+<div class="container mt-2">
+  <div class="card col-md-6 offset-3">
+    <div class="card-header">New Bank Account</div>
+    <div class="card-body">
+      <form [formGroup]="newAccountFormGroup" 
+            (ngSubmit)="handleSaveAccount()">
+
+        <!-- Type de compte -->
+        <div class="mb-3">
+          <label class="form-label">Account Type :</label>
+          <select formControlName="type" class="form-select">
+            <option value="CURRENT">Current Account</option>
+            <option value="SAVING">Saving Account</option>
+          </select>
+        </div>
+
+        <!-- Client -->
+        <div class="mb-3">
+          <label class="form-label">Customer :</label>
+          <select formControlName="customerId" class="form-select">
+            <option *ngFor="let c of customers" [value]="c.id">
+              {{c.name}} - {{c.email}}
+            </option>
+          </select>
+        </div>
+
+        <!-- Solde initial -->
+        <div class="mb-3">
+          <label class="form-label">Initial Balance :</label>
+          <input type="number" formControlName="initialBalance" 
+                 class="form-control">
+        </div>
+
+        <!-- OverDraft pour Current -->
+        <div class="mb-3" 
+             *ngIf="newAccountFormGroup.value.type === 'CURRENT'">
+          <label class="form-label">Over Draft :</label>
+          <input type="number" formControlName="overDraft" 
+                 class="form-control">
+        </div>
+
+        <!-- Interest Rate pour Saving -->
+        <div class="mb-3" 
+             *ngIf="newAccountFormGroup.value.type === 'SAVING'">
+          <label class="form-label">Interest Rate (%) :</label>
+          <input type="number" formControlName="interestRate" 
+                 class="form-control">
+        </div>
+
+        <div *ngIf="errorMessage" class="text-danger mb-2">
+          {{errorMessage}}
+        </div>
+
+        <button [disabled]="!newAccountFormGroup.valid" 
+                class="btn btn-success w-100">
+          Create Account
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

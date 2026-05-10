@@ -38,6 +38,23 @@
             </li>
           </ul>
         </li>
+        <li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+    Accounts
+  </a>
+  <ul class="dropdown-menu">
+    <li>
+      <a class="dropdown-item" routerLink="/admin/accounts">
+        Search Accounts
+      </a>
+    </li>
+    <li *ngIf="authService.roles.includes('ROLE_ADMIN')">
+      <a class="dropdown-item" routerLink="/admin/new-account">
+        New Account
+      </a>
+    </li>
+  </ul>
+</li>
       </ul>
     </div>
   </div>

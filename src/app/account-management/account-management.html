@@ -1,0 +1,76 @@
+<div class="container mt-2">
+  <div class="card">
+    <div class="card-header d-flex justify-content-between">
+      <span>Bank Accounts</span>
+      <a routerLink="/admin/new-account" 
+         *ngIf="authService.roles.includes('ROLE_ADMIN')"
+         class="btn btn-sm btn-success">
+        <i class="bi bi-plus"></i> New Account
+      </a>
+    </div>
+    <div class="card-body">
+
+      <!-- Recherche -->
+      <div class="mb-3">
+        <input type="text" 
+               class="form-control" 
+               placeholder="Search by account ID..."
+               (input)="handleSearch($event)">
+      </div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Balance</th>
+            <th>Status</th>
+            <th>Customer</th>
+            <th>Details</th>
+            <th *ngIf="authService.roles.includes('ROLE_ADMIN')">
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let a of filteredAccounts">
+            <td>{{a.id | slice:0:8}}...</td>
+            <td>
+              <span [class]="a.type === 'SavingAccount' ? 
+                'badge bg-info' : 'badge bg-primary'">
+                {{a.type}}
+              </span>
+            </td>
+            <td>{{a.balance | number:'1.2-2'}}</td>
+            <td>
+              <span [class]="a.status === 'ACTIVATED' ? 
+                'badge bg-success' : 'badge bg-warning'">
+                {{a.status}}
+              </span>
+            </td>
+            <td>{{a.customerDTO?.name}}</td>
+            <td>
+              <span *ngIf="a.type === 'CurrentAccount'">
+                OverDraft: {{a.overDraft}}
+              </span>
+              <span *ngIf="a.type === 'SavingAccount'">
+                Rate: {{a.interestRate}}%
+              </span>
+            </td>
+            <td *ngIf="authService.roles.includes('ROLE_ADMIN')">
+              <button (click)="handleDeleteAccount(a.id)" 
+                      class="btn btn-sm btn-danger">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="filteredAccounts.length === 0" 
+           class="text-center text-muted">
+        No accounts found
+      </div>
+    </div>
+  </div>
+</div>
