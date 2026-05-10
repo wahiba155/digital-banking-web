@@ -11,6 +11,8 @@ import { authorizationGuard } from './guards/authorization-guard';
 import { EditCustomerComponent } from './edit-customer/edit-customer';
 import { AccountManagementComponent } from './account-management/account-management';
 import { NewAccountComponent } from './new-account/new-account';
+import { UserManagementComponent } from './user-management/user-management';
+import { ChangePasswordComponent } from './change-password/change-password';
 
 export const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -30,6 +32,13 @@ export const routes: Routes = [
   canActivate: [authorizationGuard],
   data: { role: "ROLE_ADMIN" }
 },
+{
+  path: "users",
+  component: UserManagementComponent,
+  canActivate: [authorizationGuard],
+  data: { role: "ROLE_ADMIN" }
+},
+{ path: "change-password", component: ChangePasswordComponent },
 
       {
         path: "new-customer",
